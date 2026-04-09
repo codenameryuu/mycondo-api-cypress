@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 
-const baseUrl = "https://mycondobe.kuningan.de/api/v1";
-const url = `${baseUrl}/request-access`;
+const apiUrl = Cypress.expose("API_URL");
+const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
+const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const failedStatusCode = 200;
-const successStatusCode = 200;
+const url = apiUrl + "/request-access";
 
 const randomNumber = faker.number.int({
   min: 1,
@@ -20,13 +20,17 @@ const companyName = faker.company.name();
 
 describe("Request Access With Invalid Data Spec", () => {
   it("should be failed, case: name is required", () => {
-    cy.request("POST", url, {
-      name: "",
-      email: email,
-      phone_code: "62",
-      phone: phone,
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: "",
+        email: email,
+        phone_code: "62",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -38,13 +42,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: email is required", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: "",
-      phone_code: "62",
-      phone: phone,
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: "",
+        phone_code: "62",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -56,13 +64,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: email is invalid", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: "invalid-email",
-      phone_code: "62",
-      phone: phone,
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: "invalid-email",
+        phone_code: "62",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -74,13 +86,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: phone code is required", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: email,
-      phone_code: "",
-      phone: phone,
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: email,
+        phone_code: "",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -92,13 +108,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: phone is required", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: email,
-      phone_code: "62",
-      phone: "",
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: email,
+        phone_code: "62",
+        phone: "",
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -110,13 +130,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: company name is required", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: email,
-      phone_code: "62",
-      phone: phone,
-      company_name: "",
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: email,
+        phone_code: "62",
+        phone: phone,
+        company_name: "",
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -130,13 +154,17 @@ describe("Request Access With Invalid Data Spec", () => {
 
 describe("Request Access With Valid Data Spec", () => {
   it("should be success, case: all data is valid", () => {
-    cy.request("POST", url, {
-      name: name,
-      email: email,
-      phone_code: "62",
-      phone: phone,
-      company_name: companyName,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: email,
+        phone_code: "62",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(successStatusCode);
       expect(response.body.status).to.eq(true);

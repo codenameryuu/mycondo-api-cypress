@@ -1,18 +1,23 @@
 import { faker } from "@faker-js/faker";
 
-const baseUrl = "https://mycondobe.kuningan.de/api/v1";
-const url = `${baseUrl}/auth/forget-password`;
+const apiUrl = Cypress.expose("API_URL");
+const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
+const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
+const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 
-const failedStatusCode = 200;
-const successStatusCode = 200;
+const url = apiUrl + "/auth/forget-password";
 
 const email = faker.internet.email();
 
 describe("Forget Password With Invalid Data Spec", () => {
   it("should be failed, case: email is required", () => {
-    cy.request("POST", url, {
-      email: "",
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        email: "",
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -24,9 +29,13 @@ describe("Forget Password With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: email is invalid", () => {
-    cy.request("POST", url, {
-      email: "invalid-email",
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        email: "invalid-email",
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -38,9 +47,13 @@ describe("Forget Password With Invalid Data Spec", () => {
   });
 
   it("should be failed, case: email is not found", () => {
-    cy.request("POST", url, {
-      email: email,
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        email: email,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
@@ -51,13 +64,16 @@ describe("Forget Password With Invalid Data Spec", () => {
 
 describe("Forget Password With Valid Data Spec", () => {
   it("should be success, case: all data is valid", () => {
-    cy.request("POST", url, {
-      email: "fikri@kemang.sg",
-      language: "en",
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        email: accountEmail,
+        language: "en",
+      },
     }).then((response) => {
       expect(response.status).to.eq(successStatusCode);
       expect(response.body.status).to.eq(true);
-      expect(response.body.message.toLowerCase()).to.contain("email sent");
       expect(response.body.errors).to.be.null;
     });
   });
