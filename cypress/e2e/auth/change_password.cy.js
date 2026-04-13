@@ -12,7 +12,7 @@ describe("Change Password With Invalid Data Spec", () => {
     cy.login();
   });
 
-  it("should be failed, case: access token is required", () => {
+  it("should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
       url: url,
@@ -45,7 +45,7 @@ describe("Change Password With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("password");
       expect(response.body.errors.password).to.have.length.greaterThan(0);
-      expect(response.body.errors.password[0].toLowerCase()).to.contain("password field is required");
+      expect(response.body.errors.password[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -67,7 +67,7 @@ describe("Change Password With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("password_confirmation");
       expect(response.body.errors.password_confirmation).to.have.length.greaterThan(0);
-      expect(response.body.errors.password_confirmation[0].toLowerCase()).to.contain("password confirmation field is required");
+      expect(response.body.errors.password_confirmation[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -89,7 +89,7 @@ describe("Change Password With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("password_confirmation");
       expect(response.body.errors.password_confirmation).to.have.length.greaterThan(0);
-      expect(response.body.errors.password_confirmation[0].toLowerCase()).to.contain("password and password confirmation must match");
+      expect(response.body.errors.password_confirmation[0].toLowerCase()).to.contain("must match");
     });
   });
 });

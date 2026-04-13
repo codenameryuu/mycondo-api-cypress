@@ -4,53 +4,63 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/auth/validate-token-reset-password";
+const url = apiUrl + "/auth/validate-token-owner";
 
 const token = "57FjzFfWwqtGH6yewplboFh1RkQpPv2u";
 
-describe("Validate Token Reset Password With Invalid Data Spec", () => {
-  it("should be failed, case: token is required", () => {
+describe("Validate Token Owner With Invalid Data Spec", () => {
+  beforeEach(() => {
+    cy.login();
+  });
+
+  it("should be failed, case: bearer access token is required", () => {
     cy.request({
-      method: "GET",
+      method: "POST",
       url: url,
-      qs: {
-        token: "",
+      body: {
+        token: token,
         language: "en",
       },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
-      expect(response.body.errors).to.not.be.null;
-      expect(response.body.errors).to.have.property("token");
-      expect(response.body.errors.token).to.have.length.greaterThan(0);
-      expect(response.body.errors.token[0].toLowerCase()).to.contain("is required");
     });
   });
 
   it("should be failed, case: token is invalid", () => {
     cy.request({
-      method: "GET",
+      method: "POST",
       url: url,
-      qs: {
+      body: {
         token: "invalid-token",
         language: "en",
+      },
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem("access_token")}`,
       },
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
-      expect(response.body.message.toLowerCase()).to.contain("invalid");
+      expect(response.body.message.toLowerCase()).to.contain("not found");
     });
   });
 });
 
-// describe("Validate Token Reset Password With Valid Data Spec", () => {
+// describe("Validate Token Owner With Valid Data Spec", () => {
+//   beforeEach(() => {
+//     cy.login();
+//   });
+
 //   it("should be success, case: all data is valid", () => {
 //     cy.request({
-//       method: "GET",
+//       method: "POST",
 //       url: url,
-//       qs: {
+//       body: {
 //         token: token,
 //         language: "en",
+//       },
+//       headers: {
+//         Authorization: `Bearer ${window.localStorage.getItem("access_token")}`,
 //       },
 //     }).then((response) => {
 //       expect(response.status).to.eq(successStatusCode);

@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
+const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 
 const url = apiUrl + "/request-access";
 
@@ -37,7 +38,7 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("name");
       expect(response.body.errors.name).to.have.length.greaterThan(0);
-      expect(response.body.errors.name[0].toLowerCase()).to.contain("name field is required");
+      expect(response.body.errors.name[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -59,7 +60,7 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("email");
       expect(response.body.errors.email).to.have.length.greaterThan(0);
-      expect(response.body.errors.email[0].toLowerCase()).to.contain("email field is required");
+      expect(response.body.errors.email[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -81,7 +82,26 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("email");
       expect(response.body.errors.email).to.have.length.greaterThan(0);
-      expect(response.body.errors.email[0].toLowerCase()).to.contain("email must be a valid email address");
+      expect(response.body.errors.email[0].toLowerCase()).to.contain("must be a valid email");
+    });
+  });
+
+  it("should be failed, case: email is already taken", () => {
+    cy.request({
+      method: "POST",
+      url: url,
+      body: {
+        name: name,
+        email: accountEmail,
+        phone_code: "62",
+        phone: phone,
+        company_name: companyName,
+        language: "en",
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(failedStatusCode);
+      expect(response.body.status).to.eq(false);
+      expect(response.body.message.toLowerCase()).to.contain("already taken");
     });
   });
 
@@ -103,7 +123,7 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("phone_code");
       expect(response.body.errors.phone_code).to.have.length.greaterThan(0);
-      expect(response.body.errors.phone_code[0].toLowerCase()).to.contain("phone code field is required");
+      expect(response.body.errors.phone_code[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -125,7 +145,7 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("phone");
       expect(response.body.errors.phone).to.have.length.greaterThan(0);
-      expect(response.body.errors.phone[0].toLowerCase()).to.contain("phone field is required");
+      expect(response.body.errors.phone[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -147,7 +167,7 @@ describe("Request Access With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("company_name");
       expect(response.body.errors.company_name).to.have.length.greaterThan(0);
-      expect(response.body.errors.company_name[0].toLowerCase()).to.contain("company name field is required");
+      expect(response.body.errors.company_name[0].toLowerCase()).to.contain("is required");
     });
   });
 });

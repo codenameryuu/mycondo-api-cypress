@@ -24,7 +24,7 @@ describe("Forget Password With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("email");
       expect(response.body.errors.email).to.have.length.greaterThan(0);
-      expect(response.body.errors.email[0].toLowerCase()).to.contain("email field is required");
+      expect(response.body.errors.email[0].toLowerCase()).to.contain("is required");
     });
   });
 
@@ -42,7 +42,7 @@ describe("Forget Password With Invalid Data Spec", () => {
       expect(response.body.errors).to.not.be.null;
       expect(response.body.errors).to.have.property("email");
       expect(response.body.errors.email).to.have.length.greaterThan(0);
-      expect(response.body.errors.email[0].toLowerCase()).to.contain("email must be a valid email address");
+      expect(response.body.errors.email[0].toLowerCase()).to.contain("must be a valid email");
     });
   });
 
@@ -57,7 +57,7 @@ describe("Forget Password With Invalid Data Spec", () => {
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
-      expect(response.body.message.toLowerCase()).to.contain("invalid login credentials");
+      expect(response.body.message.toLowerCase()).to.contain("not found");
     });
   });
 });

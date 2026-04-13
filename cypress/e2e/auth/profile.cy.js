@@ -4,16 +4,16 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/auth/logout";
+const url = apiUrl + "/auth/profile";
 
-describe("Logout With Invalid Data Spec", () => {
+describe("Profile With Invalid Data Spec", () => {
   beforeEach(() => {
     cy.login();
   });
 
   it("should be failed, case: bearer access token is required", () => {
     cy.request({
-      method: "POST",
+      method: "GET",
       url: url,
       body: {
         language: "en",
@@ -25,14 +25,14 @@ describe("Logout With Invalid Data Spec", () => {
   });
 });
 
-describe("Logout With Valid Data Spec", () => {
+describe("Profile With Valid Data Spec", () => {
   beforeEach(() => {
     cy.login();
   });
 
   it("should be success, case: all data is valid", () => {
     cy.request({
-      method: "POST",
+      method: "GET",
       url: url,
       body: {
         language: "en",
