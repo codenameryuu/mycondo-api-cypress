@@ -7,12 +7,12 @@ const accountPassword = Cypress.expose("ACCOUNT_PASSWORD");
 
 const url = apiUrl + "/auth/change-password";
 
-describe("Change Password With Invalid Data Spec", () => {
+describe("Change password with invalid data spec", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("It should be failed: bearer access token is required", () => {
     cy.request({
       method: "POST",
       url: url,
@@ -27,7 +27,7 @@ describe("Change Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password is required", () => {
+  it("It should be failed: password is required", () => {
     cy.request({
       method: "POST",
       url: url,
@@ -49,7 +49,7 @@ describe("Change Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password confirmation is required", () => {
+  it("It should be failed: password confirmation is required", () => {
     cy.request({
       method: "POST",
       url: url,
@@ -71,7 +71,7 @@ describe("Change Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password and password confirmation do not match", () => {
+  it("It should be failed: password and password confirmation do not match", () => {
     cy.request({
       method: "POST",
       url: url,
@@ -94,12 +94,12 @@ describe("Change Password With Invalid Data Spec", () => {
   });
 });
 
-describe("Change Password With Valid Data Spec", () => {
+describe("Change password with valid data spec", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be success, case: all data is valid", () => {
+  it("It should be success: all data is valid", () => {
     cy.request({
       method: "POST",
       url: url,
