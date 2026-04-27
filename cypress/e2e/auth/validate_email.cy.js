@@ -5,21 +5,19 @@ const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 
-const url = apiUrl + "/auth/validate-email";
+const fakerEmail = faker.internet.email();
 
-const email = faker.internet.email();
-
-describe("Validate Email With Invalid Data Spec", () => {
+describe("Spec: validate email with invalid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("Should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-email",
       body: {
-        email: email,
+        email: fakerEmail,
         language: "en",
       },
     }).then((response) => {
@@ -28,12 +26,12 @@ describe("Validate Email With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is required", () => {
+  it("Should be failed, case: email is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-email",
       body: {
-        email: "",
+        email: null,
         language: "en",
       },
       headers: {
@@ -49,10 +47,10 @@ describe("Validate Email With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is invalid", () => {
+  it("Should be failed, case: email is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-email",
       body: {
         email: "invalid-email",
         language: "en",
@@ -70,10 +68,10 @@ describe("Validate Email With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is already taken", () => {
+  it("Should be failed, case: email is already taken", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-email",
       body: {
         email: accountEmail,
         language: "en",
@@ -89,15 +87,15 @@ describe("Validate Email With Invalid Data Spec", () => {
   });
 });
 
-describe("Validate Email With Valid Data Spec", () => {
+describe("Spec: validate email with valid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be success, case: all data is valid", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-email",
       body: {
         email: email,
         language: "en",

@@ -5,31 +5,24 @@ const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 
-const url = apiUrl + "/request-access";
+const fakerFirstName = faker.person.firstName();
+const fakerLastName = faker.person.lastName();
+const fakerName = fakerFirstName + " " + fakerLastName;
+const fakerEmail = fakerFirstName + "." + fakerLastName + faker.number.int({ min: 1, max: 99 }) + "@gmail.com";
+const fakerPhone = faker.phone.number("81########");
+const fakerCompanyName = faker.company.name();
 
-const randomNumber = faker.number.int({
-  min: 1,
-  max: 99,
-});
-
-const firstName = faker.person.firstName();
-const lastName = faker.person.lastName();
-const name = firstName + " " + lastName;
-const email = firstName + "." + lastName + randomNumber + "@gmail.com";
-const phone = faker.phone.number("81########");
-const companyName = faker.company.name();
-
-describe("Request Access With Invalid Data Spec", () => {
-  it("should be failed, case: name is required", () => {
+describe("Spec: request access with invalid data", () => {
+  it("Should be failed, case: name is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: "",
-        email: email,
+        name: null,
+        email: fakerEmail,
         phone_code: "62",
-        phone: phone,
-        company_name: companyName,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -42,16 +35,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is required", () => {
+  it("Should be failed, case: email is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
-        email: "",
+        name: fakerName,
+        email: null,
         phone_code: "62",
-        phone: phone,
-        company_name: companyName,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -64,16 +57,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is invalid", () => {
+  it("Should be failed, case: email is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
+        name: fakerName,
         email: "invalid-email",
         phone_code: "62",
-        phone: phone,
-        company_name: companyName,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -86,16 +79,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is already taken", () => {
+  it("Should be failed, case: email is already taken", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
+        name: fakerName,
         email: accountEmail,
         phone_code: "62",
-        phone: phone,
-        company_name: companyName,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -105,16 +98,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: phone code is required", () => {
+  it("Should be failed, case: phone code is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
-        email: email,
-        phone_code: "",
-        phone: phone,
-        company_name: companyName,
+        name: fakerName,
+        email: fakerEmail,
+        phone_code: null,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -127,16 +120,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: phone is required", () => {
+  it("Should be failed, case: phone is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
-        email: email,
+        name: fakerName,
+        email: fakerEmail,
         phone_code: "62",
-        phone: "",
-        company_name: companyName,
+        phone: null,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {
@@ -149,16 +142,16 @@ describe("Request Access With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: company name is required", () => {
+  it("Should be failed, case: company name is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
-        email: email,
+        name: fakerName,
+        email: fakerEmail,
         phone_code: "62",
-        phone: phone,
-        company_name: "",
+        phone: fakerPhone,
+        company_name: null,
         language: "en",
       },
     }).then((response) => {
@@ -172,17 +165,17 @@ describe("Request Access With Invalid Data Spec", () => {
   });
 });
 
-describe("Request Access With Valid Data Spec", () => {
-  it("should be success, case: all data is valid", () => {
+describe("Spec: request access with valid data", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/request-access",
       body: {
-        name: name,
-        email: email,
+        name: fakerName,
+        email: fakerEmail,
         phone_code: "62",
-        phone: phone,
-        company_name: companyName,
+        phone: fakerPhone,
+        company_name: fakerCompanyName,
         language: "en",
       },
     }).then((response) => {

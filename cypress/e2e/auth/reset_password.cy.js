@@ -5,19 +5,19 @@ const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountPassword = Cypress.expose("ACCOUNT_PASSWORD");
 
-const url = apiUrl + "/auth/reset-password";
-
 const token = "57FjzFfWwqtGH6yewplboFh1RkQpPv2u";
 
-describe("Reset Password With Invalid Data Spec", () => {
-  it("should be failed, case: token is required", () => {
+const fakerPassword = faker.internet.password();
+
+describe("Spec: reset password with invalid data", () => {
+  it("Should be failed, case: token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/reset-password",
       body: {
-        token: "",
-        password: "newpassword",
-        password_confirmation: "newpassword",
+        token: null,
+        password: fakerPassword,
+        password_confirmation: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -30,14 +30,14 @@ describe("Reset Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password is required", () => {
+  it("Should be failed, case: password is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/reset-password",
       body: {
-        token: "1234567890",
-        password: "",
-        password_confirmation: "newpassword",
+        token: token,
+        password: null,
+        password_confirmation: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -50,14 +50,14 @@ describe("Reset Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password confirmation is required", () => {
+  it("Should be failed, case: password confirmation is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/reset-password",
       body: {
-        token: "1234567890",
-        password: "newpassword",
-        password_confirmation: "",
+        token: token,
+        password: fakerPassword,
+        password_confirmation: null,
         language: "en",
       },
     }).then((response) => {
@@ -70,14 +70,14 @@ describe("Reset Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password and password confirmation do not match", () => {
+  it("Should be failed, case: password and password confirmation do not match", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/reset-password",
       body: {
-        token: "1234567890",
-        password: "newpassword",
-        password_confirmation: "newpassword2",
+        token: token,
+        password: fakerPassword,
+        password_confirmation: fakerPassword + "2",
         language: "en",
       },
     }).then((response) => {
@@ -90,14 +90,14 @@ describe("Reset Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: token is invalid", () => {
+  it("Should be failed, case: token is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/reset-password",
       body: {
         token: "invalid-token",
-        password: "newpassword",
-        password_confirmation: "newpassword",
+        password: fakerPassword,
+        password_confirmation: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -108,11 +108,11 @@ describe("Reset Password With Invalid Data Spec", () => {
   });
 });
 
-// describe("Reset Password With Valid Data Spec", () => {
-//   it("should be success, case: all data is valid", () => {
+// describe("Spec: reset password with valid data", () => {
+//   it("Should be success, case: all data is valid", () => {
 //     cy.request({
 //       method: "POST",
-//       url: url,
+//       url: apiUrl + "/auth/reset-password",
 //       body: {
 //         token: token,
 //         password: accountPassword,

@@ -5,20 +5,20 @@ const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountPassword = Cypress.expose("ACCOUNT_PASSWORD");
 
-const url = apiUrl + "/auth/set-new-password";
+const fakerPassword = faker.internet.password();
 
-describe("Set New Password With Invalid Data Spec", () => {
+describe("Spec: set new password with invalid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("Should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/set-new-password",
       body: {
-        password: "newpassword",
-        password_confirmation: "newpassword",
+        password: fakerPassword,
+        password_confirmation: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -27,13 +27,13 @@ describe("Set New Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password is required", () => {
+  it("Should be failed, case: password is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/set-new-password",
       body: {
-        password: "",
-        password_confirmation: "newpassword",
+        password: null,
+        password_confirmation: fakerPassword,
         language: "en",
       },
       headers: {
@@ -49,13 +49,13 @@ describe("Set New Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password confirmation is required", () => {
+  it("Should be failed, case: password confirmation is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/set-new-password",
       body: {
-        password: "newpassword",
-        password_confirmation: "",
+        password: fakerPassword,
+        password_confirmation: null,
         language: "en",
       },
       headers: {
@@ -71,13 +71,13 @@ describe("Set New Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password and password confirmation do not match", () => {
+  it("Should be failed, case: password and password confirmation do not match", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/set-new-password",
       body: {
-        password: "newpassword",
-        password_confirmation: "newpassword2",
+        password: fakerPassword,
+        password_confirmation: fakerPassword + "2",
         language: "en",
       },
       headers: {
@@ -94,15 +94,15 @@ describe("Set New Password With Invalid Data Spec", () => {
   });
 });
 
-describe("Set New Password With Valid Data Spec", () => {
+describe("Spec: set new password with valid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be success, case: all data is valid", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/set-new-password",
       body: {
         password: accountPassword,
         password_confirmation: accountPassword,

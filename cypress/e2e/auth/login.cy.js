@@ -6,19 +6,17 @@ const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 const accountPassword = Cypress.expose("ACCOUNT_PASSWORD");
 
-const url = apiUrl + "/auth/login";
+const fakerEmail = faker.internet.email();
+const fakerPassword = faker.internet.password();
 
-const email = faker.internet.email();
-const password = faker.internet.password();
-
-describe("Login With Invalid Data Spec", () => {
-  it("should be failed, case: email is required", () => {
+describe("Spec: login with invalid data", () => {
+  it("Should be failed, case: email is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/login",
       body: {
-        email: "",
-        password: password,
+        email: null,
+        password: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -31,13 +29,13 @@ describe("Login With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is invalid", () => {
+  it("Should be failed, case: email is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/login",
       body: {
         email: "invalid-email",
-        password: password,
+        password: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -50,13 +48,13 @@ describe("Login With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password is required", () => {
+  it("Should be failed, case: password is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/login",
       body: {
-        email: email,
-        password: "",
+        email: fakerEmail,
+        password: null,
         language: "en",
       },
     }).then((response) => {
@@ -69,13 +67,13 @@ describe("Login With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: password and email does not match", () => {
+  it("Should be failed, case: password and email does not match", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/login",
       body: {
-        email: email,
-        password: password,
+        email: fakerEmail,
+        password: fakerPassword,
         language: "en",
       },
     }).then((response) => {
@@ -86,11 +84,11 @@ describe("Login With Invalid Data Spec", () => {
   });
 });
 
-describe("Login With Valid Data Spec", () => {
-  it("should be success, case: all data is valid", () => {
+describe("Spec: login with valid data", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/login",
       body: {
         email: accountEmail,
         password: accountPassword,

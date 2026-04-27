@@ -5,8 +5,6 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/dashboard/category";
-
 let categoryName = null;
 
 const fakerName = "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss");
@@ -14,21 +12,26 @@ const fakerEmail = faker.internet.email();
 const fakerWebsite = faker.internet.url();
 const fakerPhone = faker.phone.number("81########");
 
-describe("Initialize Data Spec", () => {
+describe("Spec: create initial data to test", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("create category sample", () => {
+  const fakerSampleName = "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss");
+  const fakerSampleEmail = faker.internet.email();
+  const fakerSampleWebsite = faker.internet.url();
+  const fakerSamplePhone = faker.phone.number("81########");
+
+  it("Create category sample", () => {
     cy.request({
       method: "POST",
       url: apiUrl + "/dashboard/category",
       body: {
-        name: "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss"),
-        email: faker.internet.email(),
-        website: faker.internet.url(),
-        phone_code: 62,
-        phone: faker.phone.number("81########"),
+        name: fakerSampleName,
+        email: fakerSampleEmail,
+        website: fakerSampleWebsite,
+        phone_code: "62",
+        phone: fakerSamplePhone,
         language: "en",
       },
       headers: {
@@ -40,20 +43,20 @@ describe("Initialize Data Spec", () => {
   });
 });
 
-describe("Create Category With Invalid Data Spec", () => {
+describe("Spec: create category with invalid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("Should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         name: fakerName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -63,15 +66,15 @@ describe("Create Category With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: name is required", () => {
+  it("Should be failed, case: name is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
-        name: "",
+        name: null,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -88,15 +91,15 @@ describe("Create Category With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: name is exists", () => {
+  it("Should be failed, case: name is exists", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         name: categoryName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -111,20 +114,20 @@ describe("Create Category With Invalid Data Spec", () => {
   });
 });
 
-describe("Create Category With Valid Data Spec", () => {
+describe("Spec: create category with valid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be success, case: all data is valid", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         name: fakerName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },

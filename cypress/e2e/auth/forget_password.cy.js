@@ -5,17 +5,15 @@ const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 const accountEmail = Cypress.expose("ACCOUNT_EMAIL");
 
-const url = apiUrl + "/auth/forget-password";
+const fakerEmail = faker.internet.email();
 
-const email = faker.internet.email();
-
-describe("Forget Password With Invalid Data Spec", () => {
-  it("should be failed, case: email is required", () => {
+describe("Spec: forget password with invalid data", () => {
+  it("Should be failed, case: email is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/forget-password",
       body: {
-        email: "",
+        email: null,
         language: "en",
       },
     }).then((response) => {
@@ -28,10 +26,10 @@ describe("Forget Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is invalid", () => {
+  it("Should be failed, case: email is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/forget-password",
       body: {
         email: "invalid-email",
         language: "en",
@@ -46,12 +44,12 @@ describe("Forget Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: email is not found", () => {
+  it("Should be failed, case: email is not found", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/forget-password",
       body: {
-        email: email,
+        email: fakerEmail,
         language: "en",
       },
     }).then((response) => {
@@ -62,11 +60,11 @@ describe("Forget Password With Invalid Data Spec", () => {
   });
 });
 
-describe("Forget Password With Valid Data Spec", () => {
-  it("should be success, case: all data is valid", () => {
+describe("Spec: forget password with valid data", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/forget-password",
       body: {
         email: accountEmail,
         language: "en",

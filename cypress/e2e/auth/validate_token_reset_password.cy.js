@@ -4,17 +4,15 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/auth/validate-token-reset-password";
-
 const token = "57FjzFfWwqtGH6yewplboFh1RkQpPv2u";
 
-describe("Validate Token Reset Password With Invalid Data Spec", () => {
-  it("should be failed, case: token is required", () => {
+describe("Spec: validate token reset password with invalid data", () => {
+  it("Should be failed, case: token is required", () => {
     cy.request({
       method: "GET",
-      url: url,
+      url: apiUrl + "/auth/validate-token-reset-password",
       qs: {
-        token: "",
+        token: null,
         language: "en",
       },
     }).then((response) => {
@@ -27,10 +25,10 @@ describe("Validate Token Reset Password With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: token is invalid", () => {
+  it("Should be failed, case: token is invalid", () => {
     cy.request({
       method: "GET",
-      url: url,
+      url: apiUrl + "/auth/validate-token-reset-password",
       qs: {
         token: "invalid-token",
         language: "en",
@@ -43,11 +41,11 @@ describe("Validate Token Reset Password With Invalid Data Spec", () => {
   });
 });
 
-// describe("Validate Token Reset Password With Valid Data Spec", () => {
-//   it("should be success, case: all data is valid", () => {
+// describe("Spec: validate token reset password with valid data", () => {
+//   it("Should be success, case: all data is valid", () => {
 //     cy.request({
 //       method: "GET",
-//       url: url,
+//       url: apiUrl + "/auth/validate-token-reset-password",
 //       qs: {
 //         token: token,
 //         language: "en",

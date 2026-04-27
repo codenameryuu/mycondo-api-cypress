@@ -4,19 +4,17 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/auth/validate-token-owner";
-
 const token = "57FjzFfWwqtGH6yewplboFh1RkQpPv2u";
 
-describe("Validate Token Owner With Invalid Data Spec", () => {
+describe("Spec: validate token owner with invalid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("Should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-token-owner",
       body: {
         token: token,
         language: "en",
@@ -27,10 +25,10 @@ describe("Validate Token Owner With Invalid Data Spec", () => {
     });
   });
 
-  it("should be failed, case: token is invalid", () => {
+  it("Should be failed, case: token is invalid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/auth/validate-token-owner",
       body: {
         token: "invalid-token",
         language: "en",
@@ -46,15 +44,15 @@ describe("Validate Token Owner With Invalid Data Spec", () => {
   });
 });
 
-// describe("Validate Token Owner With Valid Data Spec", () => {
+// describe("Spec: validate token owner with valid data", () => {
 //   beforeEach(() => {
 //     cy.login();
 //   });
 
-//   it("should be success, case: all data is valid", () => {
+//   it("Should be success, case: all data is valid", () => {
 //     cy.request({
 //       method: "POST",
-//       url: url,
+//       url: apiUrl + "/auth/validate-token-owner",
 //       body: {
 //         token: token,
 //         language: "en",

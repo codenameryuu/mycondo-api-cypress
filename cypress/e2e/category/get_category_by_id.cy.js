@@ -5,25 +5,28 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/dashboard/category";
-
 let categoryId = null;
 
-describe("Initialize Data Spec", () => {
+const fakerName = "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss");
+const fakerEmail = faker.internet.email();
+const fakerWebsite = faker.internet.url();
+const fakerPhone = faker.phone.number("81########");
+
+describe("Spec: create initial data to test", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("create category sample", () => {
+  it("Create category sample", () => {
     cy.request({
       method: "POST",
       url: apiUrl + "/dashboard/category",
       body: {
-        name: "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss"),
-        email: faker.internet.email(),
-        website: faker.internet.url(),
-        phone_code: 62,
-        phone: faker.phone.number("81########"),
+        name: fakerName,
+        email: fakerEmail,
+        website: fakerWebsite,
+        phone_code: "62",
+        phone: fakerPhone,
         language: "en",
       },
       headers: {
@@ -35,25 +38,25 @@ describe("Initialize Data Spec", () => {
   });
 });
 
-describe("Get Category By Id With Invalid Data Spec", () => {
+describe("Spec: get category by id with invalid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be failed, case: bearer access token is required", () => {
+  it("Should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "GET",
-      url: url,
+      url: apiUrl + "/dashboard/category/" + categoryId,
     }).then((response) => {
       expect(response.status).to.eq(failedStatusCode);
       expect(response.body.status).to.eq(false);
     });
   });
 
-  it("should be failed, case: category id is not found", () => {
+  it("Should be failed, case: category id is not found", () => {
     cy.request({
       method: "GET",
-      url: url + "/999999999999999999999999",
+      url: apiUrl + "/dashboard/category/999999999999999999999999",
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("access_token")}`,
       },
@@ -65,15 +68,15 @@ describe("Get Category By Id With Invalid Data Spec", () => {
   });
 });
 
-describe("Get Category By Id With Valid Data Spec", () => {
+describe("Spec: get category by id with valid data", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("should be success, case: all data is valid", () => {
+  it("Should be success, case: all data is valid", () => {
     cy.request({
       method: "GET",
-      url: url + "/" + categoryId,
+      url: apiUrl + "/dashboard/category/" + categoryId,
       headers: {
         Authorization: `Bearer ${window.localStorage.getItem("access_token")}`,
       },

@@ -5,8 +5,6 @@ const apiUrl = Cypress.expose("API_URL");
 const failedStatusCode = Cypress.expose("FAILED_STATUS_CODE");
 const successStatusCode = Cypress.expose("SUCCESS_STATUS_CODE");
 
-const url = apiUrl + "/dashboard/category";
-
 let categoryId = null;
 let subcategoryName = null;
 
@@ -15,21 +13,26 @@ const fakerEmail = faker.internet.email();
 const fakerWebsite = faker.internet.url();
 const fakerPhone = faker.phone.number("81########");
 
-describe("Initialize Data Spec", () => {
+describe("Spec: create initial data to test", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  it("create category sample", () => {
+  const fakerSampleCategoryName = "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss");
+  const fakerSampleCategoryEmail = faker.internet.email();
+  const fakerSampleCategoryWebsite = faker.internet.url();
+  const fakerSampleCategoryPhone = faker.phone.number("81########");
+
+  it("Create category sample", () => {
     cy.request({
       method: "POST",
       url: apiUrl + "/dashboard/category",
       body: {
-        name: "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss"),
-        email: faker.internet.email(),
-        website: faker.internet.url(),
-        phone_code: 62,
-        phone: faker.phone.number("81########"),
+        name: fakerSampleCategoryName,
+        email: fakerSampleCategoryEmail,
+        website: fakerSampleCategoryWebsite,
+        phone_code: "62",
+        phone: fakerSampleCategoryPhone,
         language: "en",
       },
       headers: {
@@ -40,17 +43,22 @@ describe("Initialize Data Spec", () => {
     });
   });
 
-  it("create subcategory sample", () => {
+  const fakerSampleSubcategoryName = "Subcategory " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss");
+  const fakerSampleSubcategoryEmail = faker.internet.email();
+  const fakerSampleSubcategoryWebsite = faker.internet.url();
+  const fakerSampleSubcategoryPhone = faker.phone.number("81########");
+
+  it("Create subcategory sample", () => {
     cy.request({
       method: "POST",
       url: apiUrl + "/dashboard/category",
       body: {
         category_parent_id: categoryId,
-        name: "Category " + faker.internet.username() + "-" + DateTime.now().toFormat("yyyyMMddHHmmss"),
-        email: faker.internet.email(),
-        website: faker.internet.url(),
-        phone_code: 62,
-        phone: faker.phone.number("81########"),
+        name: fakerSampleSubcategoryName,
+        email: fakerSampleSubcategoryEmail,
+        website: fakerSampleSubcategoryWebsite,
+        phone_code: "62",
+        phone: fakerSampleSubcategoryPhone,
         language: "en",
       },
       headers: {
@@ -70,12 +78,13 @@ describe("Create Subcategory With Invalid Data Spec", () => {
   it("should be failed, case: bearer access token is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
+        category_parent_id: categoryId,
         name: fakerName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -88,13 +97,13 @@ describe("Create Subcategory With Invalid Data Spec", () => {
   it("should be failed, case: name is required", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         category_parent_id: categoryId,
-        name: "",
+        name: null,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -114,13 +123,13 @@ describe("Create Subcategory With Invalid Data Spec", () => {
   it("should be failed, case: name is exists", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         category_parent_id: categoryId,
         name: subcategoryName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
@@ -143,13 +152,13 @@ describe("Create Category With Valid Data Spec", () => {
   it("should be success, case: all data is valid", () => {
     cy.request({
       method: "POST",
-      url: url,
+      url: apiUrl + "/dashboard/category",
       body: {
         category_parent_id: categoryId,
         name: fakerName,
         email: fakerEmail,
         website: fakerWebsite,
-        phone_code: 62,
+        phone_code: "62",
         phone: fakerPhone,
         language: "en",
       },
